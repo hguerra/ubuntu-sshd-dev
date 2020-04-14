@@ -1,31 +1,26 @@
-# ubuntu-sshd
+# ubuntu-sshd-dev
 
 Dockerized SSH service, built on top of [official Ubuntu](https://registry.hub.docker.com/_/ubuntu/) images.
 
 ## Image tags
 
-- rastasheep/ubuntu-sshd:12.04 (precise)
-- rastasheep/ubuntu-sshd:12.10 (quantal)
-- rastasheep/ubuntu-sshd:13.04 (raring)
-- rastasheep/ubuntu-sshd:13.10 (saucy)
-- rastasheep/ubuntu-sshd:14.04 (trusty)
-- rastasheep/ubuntu-sshd:16.04 (xenial)
-- rastasheep/ubuntu-sshd:18.04 (bionic)
+- heitorcarneiro/ubuntu-sshd:18.04 (bionic)
 
 ## Installed packages
 
 Base:
 
-- [Precise (12.04) minimal](http://packages.ubuntu.com/precise/ubuntu-minimal)
-- [Quantal (12.10) minimal](http://packages.ubuntu.com/quantal/ubuntu-minimal)
-- [Raring (13.04) minimal](http://packages.ubuntu.com/raring/ubuntu-minimal)
-- [Saucy (13.10) minimal](http://packages.ubuntu.com/saucy/ubuntu-minimal)
-- [Trusty (14.04) minimal](http://packages.ubuntu.com/trusty/ubuntu-minimal)
-- [Xenial (16.04) minimal](http://packages.ubuntu.com/xenial/ubuntu-minimal)
 - [Bionic (18.04) minimal](http://packages.ubuntu.com/bionic/ubuntu-minimal)
 
 Image specific:
 - [openssh-server](https://help.ubuntu.com/community/SSH/OpenSSH/Configuring)
+- openssh-client
+- sudo
+- vim
+- inotify-tools
+- openssl
+- python
+- python-setuptools
 
 Config:
 
@@ -37,14 +32,23 @@ Config:
 
 ## Run example
 
-```bash
-$ sudo docker run -d -P --name test_sshd rastasheep/ubuntu-sshd:14.04
-$ sudo docker port test_sshd 22
+```sh
+# Option 1
+$ docker run -d -P --rm --name ubuntu heitorcarneiro/ubuntu-sshd-dev:18.04
+$ docker port ubuntu 22
   0.0.0.0:49154
 
+# root password is "root"
+# vagrant password is "vagrant"
 $ ssh root@localhost -p 49154
-# The password is `root`
-root@test_sshd $
+$ ssh vagrant@localhost -p 49154
+```
+
+```sh
+# Option 2
+# Using vagrant keys https://github.com/hashicorp/vagrant/blob/master/keys/vagrant
+$ docker run -d -p "4444:22" --rm --name ubuntu heitorcarneiro/ubuntu-sshd-dev:18.04
+$ ssh -o StrictHostKeyChecking=no vagrant@localhost -p 4444 -i ./keys/vagrant
 ```
 
 ## Security
@@ -63,4 +67,4 @@ $ docker exec test_sshd chown root:root /root/.ssh/authorized_keys
 
 ## Issues
 
-If you run into any problems with this image, please check (and potentially file new) issues on the [rastasheep/ubuntu-sshd](https://github.com/rastasheep/ubuntu-sshd/issues) repo, which is the source for this image.
+If you run into any problems with this image, please check (and potentially file new) issues on the [heitorcarneiro/ubuntu-sshd](https://github.com/heitorcarneiro/ubuntu-sshd/issues) repo, which is the source for this image.
